@@ -1,0 +1,32 @@
+
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: beathub_api
+    ports:
+      - "3000:3000"
+    environment:
+      DB_HOST: mongodb://db:27017/beathub_dev
+      JWT_SECRET: devsecret
+      PORT: 3000
+    depends_on:
+      - db
+    restart: always
+
+  db:
+    image: mongo:6
+    container_name: beathub_db
+    ports:
+      - "27017:27017"
+    volumes:
+      - db-data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: devuser
+      MONGO_INITDB_ROOT_PASSWORD: devpassword
+    restart: always
+
+volumes:
+  db-data:
